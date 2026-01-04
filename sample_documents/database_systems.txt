@@ -1,0 +1,15 @@
+Database Systems and Management
+
+Databases are the backbone of modern applications, providing organized storage and efficient retrieval of data. Understanding database systems is crucial for any developer working with persistent data.
+
+Relational Databases (SQL) use structured schemas with tables, rows, and columns. They enforce data integrity through ACID properties (Atomicity, Consistency, Isolation, Durability). Popular SQL databases include PostgreSQL, MySQL, and Microsoft SQL Server. They excel at complex queries, transactions, and maintaining data relationships through foreign keys.
+
+NoSQL Databases emerged to handle unstructured data and scale horizontally. They come in several types:
+- Document databases (MongoDB, CouchDB) store data as JSON-like documents
+- Key-value stores (Redis, DynamoDB) offer fast lookup for simple data
+- Column-family stores (Cassandra) optimize for write-heavy workloads
+- Graph databases (Neo4j) excel at relationship-heavy data
+
+Database Design involves normalization to reduce redundancy, indexing for query performance, and careful schema planning. Modern practices also include database migrations, connection pooling, and query optimization.
+
+ORMs (Object-Relational Mappers) like SQLAlchemy, Sequelize, and Entity Framework bridge the gap between object-oriented code and relational databases, making database operations more intuitive for developers.
