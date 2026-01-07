@@ -1,7 +1,4 @@
-cd /Users/parsa_samandi/Documents/Projects/semantic-search-engine
-
 # Edit requirements.txt - remove openai, add sentence-transformers
-cat > requirements.txt << 'EOF'
 fastapi==0.115.6
 uvicorn[standard]==0.34.0
 python-multipart==0.0.20
