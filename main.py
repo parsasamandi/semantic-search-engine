@@ -1,18 +1,17 @@
-from dotenv import load_dotenv
-load_dotenv()
-
 from fastapi import FastAPI, UploadFile, HTTPException
 from fastapi.responses import HTMLResponse
 from fastapi.staticfiles import StaticFiles
 from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel
-from openai import OpenAI
+from sentence_transformers import SentenceTransformer
 import faiss
 import numpy as np
-import os
 from typing import List
 
 app = FastAPI(title="Semantic Search Engine")
+
+# Initialize FREE embedding model (no API key needed!)
+model = SentenceTransformer('all-MiniLM-L6-v2')
 
 # Enable CORS for local development
 app.add_middleware(
@@ -22,9 +21,6 @@ app.add_middleware(
     allow_methods=["*"],
     allow_headers=["*"],
 )
-
-# Initialize OpenAI client
-client = OpenAI(api_key=os.getenv("OPENAI_API_KEY"))
 
 # Data storage
 documents = []
@@ -43,13 +39,10 @@ class SearchResult(BaseModel):
     rank: int
 
 def get_embedding(text: str) -> List[float]:
-    """Generate embedding for text using OpenAI API"""
+    """Generate embedding for text using Hugging Face (FREE!)"""
     try:
-        response = client.embeddings.create(
-            model="text-embedding-3-small",
-            input=text
-        )
-        return response.data[0].embedding
+        embedding = model.encode(text)
+        return embedding.tolist()
     except Exception as e:
         raise HTTPException(status_code=500, detail=f"Error generating embedding: {str(e)}")
 
