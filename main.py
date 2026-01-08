@@ -4,10 +4,13 @@ from fastapi.staticfiles import StaticFiles
 from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel
 from sentence_transformers import SentenceTransformer
+# Smart algorithms find similar vectors quickly
 import faiss
+# NumPy arrays facilitate advanced mathematical and other types of operations on large numbers of data
 import numpy as np
 from typing import List
 
+# Initialize FastAPI app (AI)
 app = FastAPI(title="Semantic Search Engine")
 
 # Initialize FREE embedding model (no API key needed!)
@@ -41,7 +44,7 @@ class SearchResult(BaseModel):
 def get_embedding(text: str) -> List[float]:
     """Generate embedding for text using Hugging Face (FREE!)"""
     try:
-        embedding = model.encode(text)
+        embedding = model.encode(text) # AI comes here
         return embedding.tolist()
     except Exception as e:
         raise HTTPException(status_code=500, detail=f"Error generating embedding: {str(e)}")
@@ -52,10 +55,13 @@ def rebuild_index():
     if len(embeddings) == 0:
         index = None
         return
-    
+    # Convert list of embeddings to NumPy array
     embeddings_array = np.array(embeddings, dtype='float32')
+    # Get the size of each embedding vector
     dimension = len(embeddings[0])
+    # Smart algorithms find similar vectors quickly (faiss)
     index = faiss.IndexFlatL2(dimension)
+    # Add all embeddings to the index
     index.add(embeddings_array)
 
 @app.get("/", response_class=HTMLResponse)
@@ -109,10 +115,11 @@ async def search_documents(query: SearchQuery):
     
     try:
         # Generate query embedding
-        query_embedding = np.array([get_embedding(query.query)], dtype='float32')
+        query_embedding = np.array([get_embedding(query.query)], dtype='float32') # AI runs here also
         
         # Search using FAISS
         k = min(query.top_k, len(documents))
+        # Returns the 3 closest vectors to the query_embedding (faiss)
         distances, indices = index.search(query_embedding, k)
         
         # Format results

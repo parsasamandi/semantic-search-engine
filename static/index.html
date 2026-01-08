@@ -403,7 +403,7 @@
                     const data = await response.json();
 
                     if (response.ok) {
-                        showMessage(`✅ ${file.name} uploaded successfully!`, 'success');
+                        showMessage(`${file.name} uploaded successfully!`, 'success');
                         await updateStats();
                     } else {
                         showMessage(`❌ Error uploading ${file.name}: ${data.detail}`, 'error');
