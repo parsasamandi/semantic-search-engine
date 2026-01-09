@@ -107,6 +107,7 @@ async def upload_document(file: UploadFile):
     except Exception as e:
         raise HTTPException(status_code=500, detail=f"Error processing file: {str(e)}")
 
+# Search endpoint
 @app.post("/search", response_model=List[SearchResult])
 async def search_documents(query: SearchQuery):
     """Search for similar documents"""
@@ -149,6 +150,7 @@ async def get_stats():
         "index_ready": index is not None
     }
 
+# clear all documents and reset the index  
 @app.delete("/clear")
 async def clear_documents():
     """Clear all documents and reset the index"""
