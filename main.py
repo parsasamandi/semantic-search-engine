@@ -3,7 +3,7 @@ from fastapi.responses import HTMLResponse
 from fastapi.staticfiles import StaticFiles
 from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel
-from sentence_transformers import SentenceTransformer
+from fastembed import TextEmbedding
 # Smart algorithms find similar vectors quickly
 import faiss
 # NumPy arrays facilitate advanced mathematical and other types of operations on large numbers of data
@@ -13,8 +13,8 @@ from typing import List
 # Initialize FastAPI app (AI)
 app = FastAPI(title="Semantic Search Engine")
 
-# Initialize FREE embedding model (no API key needed!)
-model = SentenceTransformer('all-MiniLM-L6-v2')
+# Initialize embedding model lazily to reduce startup memory
+model = None
 
 # Enable CORS for local development
 app.add_middleware(
@@ -41,10 +41,20 @@ class SearchResult(BaseModel):
     similarity_score: float
     rank: int
 
+def get_model() -> TextEmbedding:
+    global model
+    if model is None:
+        try:
+            model = TextEmbedding(model_name="BAAI/bge-small-en-v1.5")
+        except Exception as e:
+            raise HTTPException(status_code=500, detail=f"Error loading embedding model: {str(e)}")
+    return model
+
 def get_embedding(text: str) -> List[float]:
-    """Generate embedding for text using Hugging Face (FREE!)"""
+    """Generate embedding for text (CPU-friendly, no GPU needed)."""
     try:
-        embedding = model.encode(text) # AI comes here
+        embedder = get_model()
+        embedding = next(embedder.embed([text]))
         return embedding.tolist()
     except Exception as e:
         raise HTTPException(status_code=500, detail=f"Error generating embedding: {str(e)}")
