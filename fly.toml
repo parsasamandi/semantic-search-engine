@@ -1,10 +1,10 @@
-# fly.toml app configuration file generated for semantic-search-engine-3ndafw on 2026-02-05T00:19:28Z
+# fly.toml app configuration file generated for semantic-search-engine on 2026-02-05T00:53:59Z
 #
 # See https://fly.io/docs/reference/configuration/ for information about how to use this file.
 #
 
-app = 'semantic-search-engine-3ndafw'
-primary_region = 'ord'
+app = 'semantic-search-engine'
+primary_region = 'iad'
 
 [build]
 
